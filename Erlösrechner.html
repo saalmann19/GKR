@@ -1,0 +1,97 @@
+
+<!-- saved from url=(0029)https://kebanh.github.io/BWL/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Erlösrechner</title>
+			<script>
+			"use strict";
+			function fErloesrechner() {
+			// Quellcode
+
+			var vProduktionsmenge;
+			var vAusgabe;
+			var vKV;
+			var vKostGesamt;
+			var vKF;
+			var vStueckPreis;
+			var vE, vG, vBEP;
+			var vGewinnschwelle;
+			var vMenge=1000;
+			
+
+			vProduktionsmenge = parseFloat(document.getElementById("idProduktionsmenge").value);
+			vStueckPreis = parseFloat(document.getElementById("idPreis").value);
+			
+			vKV=parseFloat(document.getElementById("idKV").value);
+			vKF=parseFloat(document.getElementById("idKF").value);
+
+			vAusgabe = "";
+			vAusgabe = vAusgabe + "<table border=1>";
+			vAusgabe = vAusgabe + "<tr><th>Menge</th><th>Kosten K(x) = k<sub>F</sub> + k<sub>v</sub> * x </th><th>Erlöse E (x) = p * × </td><th>Gewinn G(x) = E(x) - K(x)</th><th>Bemerkung</th></tr>";
+            
+			// Schhleife mit der Bedingung das die Startmenge kleiner sein muss, als die Produktionsmenge
+			while(vMenge<=vProduktionsmenge){
+			// Gesamtkosten errechnen sich auch aus der abgesetzten Menge * Variable Kosten + Fixe Kosten	
+			vKostGesamt=vMenge*vKV+vKF;
+			
+			// Erlösrechnung ist die verkaufte Menge * Preis pro Stück!
+				vE=vMenge*vStueckPreis;
+			
+			// Gewinn ist Erlös - Gesamtkosten(Variable und Flexible Kosten)
+				
+			vG=vE-vKostGesamt ;
+			// Bei Gewinn unter 0, haben wir eine sogenannte Verlustzone, bitte rot markieren...
+			if (vG<0){
+				vAusgabe = vAusgabe + "<tr><th>" + vMenge + "</th><th>" + vKostGesamt + "</th><th>" + vE + "</th><th style=background-color: red>" + vG + "</th><th style=color:red>" + "Verlustzone" + "</th></tr>";
+			}
+			
+			// Bei Gewinn größer 0, haben wir einen Gewinn...
+			else {
+				vAusgabe = vAusgabe + "<tr><th>" + vMenge + "</th><th>" + vKostGesamt + "</th><th>" + vE + "</th><th style=background-color: green>" + vG + "</th><th style=color:green>" + "Gewinnzone" + "</th></tr>";
+			}
+
+			//Hochzählen in 1000er Schritten, damit die Schleife terminiert...
+					vMenge = vMenge + 1000;
+			}
+
+			//Berechne die Gewinnschwellenmenge in Stück 
+		    vBEP = vKF/(vStueckPreis-vKV)
+			// Auf- bzw. Abrunden auf Ganze Stückzahlen. 
+			
+			
+			//Berechne die Gewinnschwelle in Euro 
+			vGewinnschwelle= vBEP*vStueckPreis;
+			vAusgabe = vAusgabe + "Break-Even-Point: ";
+			
+			// Ausgabe der Break-Even-Point Stückmenge gerundet!
+			vAusgabe = vAusgabe + vBEP + " Stück </br>";
+			vAusgabe = vAusgabe + "---------------------------------------</br>"
+			vAusgabe = vAusgabe + "Gewinnschwelle: ";
+			
+			// Ausgabe des Break-Even-Points in Euro, zwei Stellen nach dem Komma. 
+			vAusgabe = vAusgabe + vGewinnschwelle.toFixed(2) + " € </br>";
+			vAusgabe = vAusgabe + "---------------------------------------</br>"
+			
+			vAusgabe = vAusgabe + "</table></br>";
+			
+			//Ausgabe der Variable vAusgabe im Div-Element 		
+			document.getElementById("idAusgabe").innerHTML = vAusgabe;
+		
+		}
+
+		</script></head>
+
+
+
+
+	<body>
+		<h1>Gewinn- und Erlösfunktion</h1>
+	Kosten-Variabel(k): <input id="idKV" value="4.50" size="6">
+		Kosten-Fix: <input id="idKF" value="12800" size="6"><br><br>
+		Produktionsmengen(x): <input id="idProduktionsmenge" value="20000" size="6">
+		Stückpreis(p): <input id="idPreis" value="6.00" size="6">
+		<button onclick="fErloesrechner();">Kostentabelle!</button><br><br>
+        <div id="idAusgabe"></div>
+
+
+
+</body></html>
